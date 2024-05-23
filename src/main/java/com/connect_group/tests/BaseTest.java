@@ -1,14 +1,16 @@
 package com.connect_group.tests;
 
 import com.connect_group.project_config.ScreenShotService;
-import io.github.bonigarcia.wdm.WebDriverManager;
+
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
+
 import org.junit.jupiter.api.extension.RegisterExtension;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+
 
 import java.util.logging.Logger;
 
@@ -29,18 +31,26 @@ public class BaseTest {
     getDriver().get(url);
     LOGGER.info("Opening URL - " + url);
   }
+  
+
 
   @BeforeAll
-  public static void beforeSuite() {
-    WebDriverManager.chromedriver().setup();
-
+  public static void beforeSuite() throws InterruptedException {
+ 
+		System.setProperty("webdriver.chrome.driver",
+				"src\\main\\java\\Driver\\chromedriver.exe");	
+  
     driver = new ChromeDriver(getChromeOptions());
+
     driver.manage().window().maximize();
+  
   }
 
   @AfterEach
   public void cleanUp() {
+	  
     driver.manage().deleteAllCookies();
+   
   }
 
   @AfterAll
@@ -51,6 +61,13 @@ public class BaseTest {
   }
 
   protected static ChromeOptions getChromeOptions() {
-    return new ChromeOptions().setHeadless(false);
+	  ChromeOptions options = new ChromeOptions();
+	    options.setHeadless(false);     
+	    options.addArguments("--disable-notifications");
+	    options.addArguments("--accept-cookies");
+	    options.addArguments("--disable-popup-blocking");
+	    return options;
+    
+    
   }
 }

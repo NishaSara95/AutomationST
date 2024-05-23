@@ -1,6 +1,8 @@
 package com.connect_group.pages;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -8,6 +10,7 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
@@ -58,6 +61,24 @@ public class BasePage {
   protected void waitForTextToDisappear(By locator, String text) {
     wait.until(ExpectedConditions.not(ExpectedConditions.textToBe(locator, text)));
   }
+  
+  protected void scrollInToView(WebElement element) {	
+		((JavascriptExecutor) getDriver()).executeScript("arguments[0].scrollIntoView(true);", element);	
+	}
+  
+  protected boolean isElementPresent(By by) {
+      try {
+          getDriver().findElement(by);
+          return true;
+      } catch (NoSuchElementException e) {
+          return false;
+      }
+  }
+  
+  public void scrollWindow(final int x, final int y) {
+		JavascriptExecutor jse = (JavascriptExecutor) driver;
+		jse.executeScript("scroll(" + x + "," + y + ")");
+	}
 
   protected Actions actions() {
     return new Actions(getDriver());
